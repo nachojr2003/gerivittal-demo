@@ -1,0 +1,14 @@
+# Internal knowledge base / docs (no publicar)
+bloque1_triage_geriatrico.md
+bloque2_triage_geriatrico.json
+knowledge_base_triage_geriatrico_completo.md
+demo.html
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
+.env*
+.claude.json
+node_modules/

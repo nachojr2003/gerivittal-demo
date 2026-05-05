@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GERIVITTAL — Telesalud geriátrica con respuesta inmediata</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0E7C8C;
+    --primary-dark: #0A5C68;
+    --primary-light: #E6F2F4;
+    --secondary: #E8896B;
+    --secondary-dark: #C76A4D;
+    --gold: #C9A961;
+    --bg: #FAF8F3;
+    --bg-card: #FFFFFF;
+    --text: #1A2332;
+    --text-muted: #5A6470;
+    --border: #E8E2D5;
+    --red: #C0392B;
+    --shadow-sm: 0 2px 8px rgba(26, 35, 50, 0.06);
+    --shadow-md: 0 8px 24px rgba(26, 35, 50, 0.10);
+    --shadow-lg: 0 20px 48px rgba(26, 35, 50, 0.16);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+  a { color: var(--primary); text-decoration: none; }
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250, 248, 243, 0.92);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; max-width: 1180px; margin: 0 auto; }
+  .brand { display: flex; align-items: center; gap: 12px; font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; color: var(--text); letter-spacing: 0.02em; }
+  .brand-mark {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-family: 'Fraunces', serif; font-weight: 700; font-size: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { color: var(--text); font-weight: 500; font-size: 15px; transition: color .15s; }
+  .nav-links a:hover { color: var(--primary); }
+  .nav-cta {
+    background: var(--primary); color: #fff !important;
+    padding: 10px 18px; border-radius: 999px; font-weight: 600 !important; font-size: 14px !important;
+    transition: all .2s; box-shadow: var(--shadow-sm);
+  }
+  .nav-cta:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  @media (max-width: 720px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+  /* HERO */
+  .hero { padding: 80px 0 60px; position: relative; overflow: hidden; }
+  .hero::before {
+    content: ''; position: absolute; top: -120px; right: -120px; width: 480px; height: 480px;
+    background: radial-gradient(circle, rgba(232, 137, 107, 0.18) 0%, transparent 70%);
+    border-radius: 50%; z-index: 0;
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: -160px; left: -160px; width: 520px; height: 520px;
+    background: radial-gradient(circle, rgba(14, 124, 140, 0.12) 0%, transparent 70%);
+    border-radius: 50%; z-index: 0;
+  }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 64px; align-items: center; position: relative; z-index: 1; }
+  @media (max-width: 920px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--primary-light); color: var(--primary-dark);
+    padding: 8px 16px; border-radius: 999px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--secondary); animation: pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.4); } }
+  h1 { font-size: clamp(36px, 5vw, 56px); margin-bottom: 24px; }
+  h1 em { font-style: italic; color: var(--primary); font-weight: 500; }
+  .hero p.lead { font-size: 19px; color: var(--text-muted); margin-bottom: 32px; max-width: 540px; }
+  .cta-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 28px; border-radius: 999px; font-weight: 600; font-size: 16px;
+    border: none; cursor: pointer; transition: all .2s; font-family: inherit;
+  }
+  .btn-primary { background: var(--primary); color: #fff; box-shadow: var(--shadow-md); }
+  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .btn-ghost { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* HERO CARD */
+  .hero-card {
+    background: var(--bg-card); border-radius: 24px; padding: 32px;
+    box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+    position: relative;
+  }
+  .hero-card::before {
+    content: ''; position: absolute; inset: -2px; border-radius: 24px;
+    background: linear-gradient(135deg, rgba(14, 124, 140, 0.2), rgba(232, 137, 107, 0.2));
+    z-index: -1; filter: blur(20px); opacity: 0.6;
+  }
+  .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .stat-num { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: var(--primary); line-height: 1; }
+  .stat-lbl { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+  .quote {
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 19px; line-height: 1.5;
+    color: var(--text); padding: 20px 0;
+  }
+  .quote-author { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+  .avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 600; font-size: 16px;
+  }
+  .author-name { font-weight: 600; font-size: 14px; }
+  .author-title { font-size: 13px; color: var(--text-muted); }
+
+  /* SECTIONS */
+  section { padding: 80px 0; }
+  .section-eyebrow { text-align: center; }
+  .section-eyebrow .eyebrow { margin: 0 auto 16px; }
+  h2 { font-size: clamp(30px, 4vw, 42px); text-align: center; margin-bottom: 16px; }
+  .section-sub { text-align: center; color: var(--text-muted); max-width: 640px; margin: 0 auto 56px; font-size: 18px; }
+
+  /* FEATURES GRID */
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 880px) { .features { grid-template-columns: 1fr; } }
+  .feature {
+    background: var(--bg-card); border-radius: 20px; padding: 32px;
+    border: 1px solid var(--border); transition: all .25s;
+  }
+  .feature:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--primary-light); }
+  .feature-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: var(--primary-light); color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; font-size: 24px;
+  }
+  .feature h3 { font-size: 20px; margin-bottom: 10px; }
+  .feature p { color: var(--text-muted); font-size: 15px; }
+
+  /* TRIAGE BAND */
+  .triage { background: linear-gradient(135deg, #0E7C8C 0%, #0A5C68 100%); color: #fff; border-radius: 24px; padding: 56px 40px; margin: 0 24px; }
+  @media (min-width: 1180px) { .triage { margin: 0 auto; max-width: 1132px; } }
+  .triage h2 { color: #fff; }
+  .triage .section-sub { color: rgba(255,255,255,0.85); }
+  .triage-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+  @media (max-width: 760px) { .triage-grid { grid-template-columns: 1fr; } }
+  .triage-card {
+    background: rgba(255,255,255,0.08); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.18); border-radius: 16px; padding: 24px;
+  }
+  .triage-card .badge {
+    display: inline-block; padding: 4px 12px; border-radius: 999px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .badge-red { background: #E8896B; color: #4A1F12; }
+  .badge-yellow { background: #F2C75C; color: #4A3A0E; }
+  .badge-green { background: #7DBF8E; color: #143A1E; }
+  .triage-card h4 { font-family: 'Fraunces', serif; font-size: 19px; margin-bottom: 8px; }
+  .triage-card p { font-size: 14px; opacity: 0.9; line-height: 1.5; }
+
+  /* DOCTOR */
+  .doctor-row { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  @media (max-width: 880px) { .doctor-row { grid-template-columns: 1fr; } }
+  .doctor-card {
+    background: var(--bg-card); border-radius: 24px; padding: 40px;
+    border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+  }
+  .doctor-portrait {
+    width: 96px; height: 96px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-family: 'Fraunces', serif; font-weight: 700; font-size: 38px;
+    margin-bottom: 20px; box-shadow: var(--shadow-md);
+  }
+  .doctor-card h3 { font-size: 26px; margin-bottom: 6px; }
+  .doctor-card .role { color: var(--primary); font-weight: 600; font-size: 15px; margin-bottom: 20px; }
+  .doctor-card ul { list-style: none; }
+  .doctor-card li {
+    padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 15px;
+    display: flex; align-items: start; gap: 12px;
+  }
+  .doctor-card li:last-child { border-bottom: none; }
+  .check { color: var(--primary); font-weight: 700; flex-shrink: 0; }
+
+  /* CTA FINAL */
+  .cta-final { background: var(--bg-card); border-radius: 24px; padding: 64px 40px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+  .cta-final h2 { margin-bottom: 16px; }
+
+  /* FOOTER */
+  footer { padding: 48px 0; border-top: 1px solid var(--border); margin-top: 80px; }
+  .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; font-size: 14px; color: var(--text-muted); }
+  .footer-inner a { color: var(--text-muted); margin-left: 20px; }
+
+  /* ============ WIDGET CHAT ============ */
+  .widget-fab {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9998;
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 30px rgba(14, 124, 140, 0.4);
+    transition: all .2s;
+  }
+  .widget-fab:hover { transform: scale(1.06); box-shadow: 0 14px 36px rgba(14, 124, 140, 0.55); }
+  .widget-fab svg { width: 28px; height: 28px; }
+  .widget-fab .pulse-ring {
+    position: absolute; inset: -4px; border-radius: 50%;
+    border: 2px solid var(--primary); opacity: 0; animation: ring 2s ease-out infinite;
+  }
+  @keyframes ring { 0% { opacity: 0.6; transform: scale(0.95); } 100% { opacity: 0; transform: scale(1.4); } }
+
+  .widget-panel {
+    position: fixed; bottom: 100px; right: 24px; z-index: 9999;
+    width: 400px; max-width: calc(100vw - 32px);
+    height: 620px; max-height: calc(100vh - 130px);
+    background: var(--bg-card); border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(26, 35, 50, 0.28);
+    display: none; flex-direction: column; overflow: hidden;
+    border: 1px solid var(--border);
+    animation: slideUp .25s ease-out;
+  }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .widget-panel.open { display: flex; }
+
+  .widget-header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff; padding: 18px 20px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .widget-header .header-mark {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: rgba(255,255,255,0.18);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px;
+  }
+  .widget-header .h-title { font-family: 'Fraunces', serif; font-weight: 600; font-size: 17px; }
+  .widget-header .h-sub { font-size: 12px; opacity: 0.85; display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+  .h-sub .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #7DBF8E; box-shadow: 0 0 0 0 rgba(125, 191, 142, 0.7); animation: pulseDot 1.6s infinite; }
+  @keyframes pulseDot { 0% { box-shadow: 0 0 0 0 rgba(125,191,142,0.7); } 70% { box-shadow: 0 0 0 8px rgba(125,191,142,0); } 100% { box-shadow: 0 0 0 0 rgba(125,191,142,0); } }
+  .widget-close { margin-left: auto; background: rgba(255,255,255,0.15); color: #fff; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; line-height: 1; }
+  .widget-close:hover { background: rgba(255,255,255,0.25); }
+
+  .widget-emergency-bar {
+    background: #FFF4F1; border-bottom: 1px solid #F5D8CC;
+    padding: 10px 16px; font-size: 13px; color: #8C3A1F;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .widget-emergency-bar strong { color: var(--red); }
+
+  .widget-msgs {
+    flex: 1; overflow-y: auto; padding: 18px 18px 6px;
+    display: flex; flex-direction: column; gap: 12px;
+    background: #FBFAF6;
+  }
+  .msg { max-width: 84%; padding: 12px 16px; border-radius: 16px; font-size: 15px; line-height: 1.5; word-wrap: break-word; }
+  .msg.bot { background: #fff; color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px; align-self: flex-start; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+  .msg.user { background: var(--primary); color: #fff; border-bottom-right-radius: 4px; align-self: flex-end; }
+  .msg.bot strong { color: var(--primary-dark); }
+  .msg.bot img { max-width: 1.2em !important; max-height: 1.2em !important; display: inline-block !important; vertical-align: text-bottom !important; }
+  .typing { display: inline-flex; gap: 4px; padding: 14px 16px; }
+  .typing span { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); opacity: 0.4; animation: typingDot 1.2s infinite; }
+  .typing span:nth-child(2) { animation-delay: .2s; }
+  .typing span:nth-child(3) { animation-delay: .4s; }
+  @keyframes typingDot { 0%, 60%, 100% { opacity: 0.3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-4px); } }
+
+  .quick-pills { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 18px 12px; }
+  .pill {
+    background: #fff; border: 1px solid var(--border); color: var(--primary-dark);
+    padding: 8px 14px; border-radius: 999px; cursor: pointer; font-size: 13px; font-weight: 500;
+    transition: all .15s;
+  }
+  .pill:hover { background: var(--primary-light); border-color: var(--primary); }
+
+  .widget-input {
+    border-top: 1px solid var(--border); padding: 14px 16px; background: #fff;
+    display: flex; gap: 10px; align-items: flex-end;
+  }
+  .widget-input textarea {
+    flex: 1; resize: none; border: 1px solid var(--border); border-radius: 14px;
+    padding: 12px 14px; font-family: inherit; font-size: 15px; color: var(--text);
+    outline: none; max-height: 100px; min-height: 44px; line-height: 1.4;
+    transition: border-color .15s;
+  }
+  .widget-input textarea:focus { border-color: var(--primary); }
+  .widget-send {
+    width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  .widget-send:hover:not(:disabled) { background: var(--primary-dark); }
+  .widget-send:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .widget-footer {
+    text-align: center; padding: 8px; font-size: 11px; color: var(--text-muted);
+    border-top: 1px solid var(--border); background: #fff;
+  }
+  .widget-footer a { color: var(--text-muted); }
+
+  @media (max-width: 480px) {
+    .widget-panel { right: 8px; left: 8px; bottom: 90px; width: auto; height: calc(100vh - 110px); }
+    .widget-fab { bottom: 16px; right: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark">G</div>
+      GERIVITTAL
+    </div>
+    <div class="nav-links">
+      <a href="#servicios">Servicios</a>
+      <a href="#triage">Cómo funciona</a>
+      <a href="#doctor">El Doctor</a>
+      <a href="#" class="nav-cta" onclick="GeriWidget.open(); return false;">Hablar con asistente</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow"><span class="dot"></span>Telesalud geriátrica · Lima, Perú</span>
+        <h1>Cuidamos a sus padres <em>con la atención que merecen</em>, sin que tenga que esperar.</h1>
+        <p class="lead">Cuando un adulto mayor sufre una caída, un dolor o un síntoma preocupante, cada minuto cuenta. GERIVITTAL atiende en segundos, evalúa la urgencia y conecta al paciente con el doctor en el momento exacto.</p>
+        <div class="cta-row">
+          <button class="btn btn-primary" onclick="GeriWidget.open()">
+            Probar el asistente ahora
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <a href="#triage" class="btn btn-ghost">Ver cómo funciona</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="quote">"Mi mamá se cayó en la madrugada. Escribimos al asistente, evaluó la situación en menos de un minuto y nos dijo exactamente qué hacer y a quién llamar. El Doctor se comunicó al instante."</div>
+        <div class="quote-author">
+          <div class="avatar">CR</div>
+          <div>
+            <div class="author-name">Carolina R.</div>
+            <div class="author-title">Cuidadora · San Isidro</div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div>
+            <div class="stat-num">&lt; 30s</div>
+            <div class="stat-lbl">Tiempo promedio<br>al primer triage</div>
+          </div>
+          <div>
+            <div class="stat-num">24/7</div>
+            <div class="stat-lbl">Disponibilidad<br>todos los días</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="servicios">
+  <div class="container">
+    <div class="section-eyebrow"><span class="eyebrow">Qué ofrecemos</span></div>
+    <h2>Atención geriátrica continua, no solo para emergencias</h2>
+    <p class="section-sub">El asistente acompaña al adulto mayor y a su familia en el día a día — y sabe cuándo es momento de avisar al Doctor.</p>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Triage inmediato 24/7</h3>
+        <p>Caídas, dolor torácico, mareo, dificultad para respirar. El asistente evalúa síntomas con criterios clínicos y clasifica la urgencia en segundos.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <h3>Escalamiento al Doctor</h3>
+        <p>Cuando hay banderas rojas, el Doctor recibe la notificación al instante con el resumen clínico ya estructurado. Cero pérdida de información.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </div>
+        <h3>Acompañamiento humano</h3>
+        <p>Tono cálido y respetuoso, frases cortas, una pregunta a la vez. Diseñado para personas mayores y para cuidadores en momentos de estrés.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="triage" style="padding: 60px 0;">
+  <div class="triage">
+    <div class="section-eyebrow"><span class="eyebrow" style="background: rgba(255,255,255,0.15); color: #fff;">Cómo funciona</span></div>
+    <h2>Tres niveles de urgencia, una sola respuesta clara</h2>
+    <p class="section-sub">El asistente aplica los mismos criterios de triage que un servicio de emergencias geriátricas — adaptados al contexto del paciente.</p>
+    <div class="triage-grid">
+      <div class="triage-card">
+        <span class="badge badge-red">Rojo · Inmediato</span>
+        <h4>Riesgo de vida</h4>
+        <p>Pérdida de conciencia, dolor torácico opresivo, sospecha de ACV, fractura de cadera, anafilaxia. Aviso al Doctor + recomendación de llamar al 106 (SAMU).</p>
+      </div>
+      <div class="triage-card">
+        <span class="badge badge-yellow">Amarillo · Hoy</span>
+        <h4>Atención prioritaria</h4>
+        <p>Caídas leves, fiebre persistente, hipoglucemia controlada, confusión leve. El Doctor se comunica en menos de 2 horas.</p>
+      </div>
+      <div class="triage-card">
+        <span class="badge badge-green">Verde · Seguimiento</span>
+        <h4>Manejo conversacional</h4>
+        <p>Dudas de medicación, alimentación, cuidados generales. Orientación inmediata + opción de agendar control no urgente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="doctor">
+  <div class="container">
+    <div class="doctor-row">
+      <div>
+        <span class="eyebrow">Detrás del asistente</span>
+        <h2 style="text-align: left; margin-bottom: 20px;">Un doctor con años de experiencia en adultos mayores</h2>
+        <p style="color: var(--text-muted); font-size: 17px; margin-bottom: 24px;">El asistente de GERIVITTAL nunca reemplaza al médico. Hace lo que un buen recepcionista clínico haría en segundos: escuchar, evaluar la urgencia, recopilar información útil y conectar con quien debe atender. Detrás está siempre el Doctor.</p>
+        <p style="color: var(--text-muted); font-size: 17px;">Cada conversación queda registrada en una ficha clínica que el Doctor revisa antes de cualquier llamada o consulta — y eso significa más tiempo cuidando, menos tiempo recopilando.</p>
+      </div>
+      <div class="doctor-card">
+        <div class="doctor-portrait">Dr</div>
+        <h3>Doctor de GERIVITTAL</h3>
+        <div class="role">Geriatría · Atención a adultos mayores</div>
+        <ul>
+          <li><span class="check">✓</span> Médico colegiado, experiencia consolidada en atención geriátrica</li>
+          <li><span class="check">✓</span> Ficha clínica completa antes de la primera llamada</li>
+          <li><span class="check">✓</span> Disponibilidad para visita domiciliaria o teleconsulta</li>
+          <li><span class="check">✓</span> Manejo de casos complejos: polifarmacia, fragilidad, demencia</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="cta-final">
+      <span class="eyebrow">Pruébelo ahora</span>
+      <h2>Escríbale al asistente como si su mamá se acabara de caer</h2>
+      <p class="section-sub">Esta es una demo en vivo. Cuente lo que está pasando — el asistente le va a guiar paso a paso.</p>
+      <button class="btn btn-primary" onclick="GeriWidget.open()" style="font-size: 17px;">
+        Abrir asistente GERIVITTAL
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>© 2026 GERIVITTAL · Telesalud geriátrica</div>
+      <div>
+        <a href="#">Política de privacidad</a>
+        <a href="https://ijvagency.com" target="_blank" rel="noopener">Powered by IJV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================ -->
+<!-- WIDGET CHAT GERIVITTAL                                        -->
+<!-- ============================================================ -->
+<button class="widget-fab" id="geri-fab" onclick="GeriWidget.toggle()" aria-label="Abrir chat de GERIVITTAL">
+  <span class="pulse-ring"></span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+</button>
+
+<div class="widget-panel" id="geri-panel" role="dialog" aria-label="Asistente GERIVITTAL">
+  <div class="widget-header">
+    <div class="header-mark">G</div>
+    <div>
+      <div class="h-title">Asistente GERIVITTAL</div>
+      <div class="h-sub"><span class="live-dot"></span> En línea · responde en segundos</div>
+    </div>
+    <button class="widget-close" onclick="GeriWidget.close()" aria-label="Cerrar">×</button>
+  </div>
+  <div class="widget-emergency-bar">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+    Si hay riesgo de vida, llame al <strong>106 (SAMU)</strong> de inmediato.
+  </div>
+  <div class="widget-msgs" id="geri-msgs"></div>
+  <div class="quick-pills" id="geri-pills">
+    <button class="pill" onclick="GeriWidget.sendQuick('Mi mamá de 82 años se cayó hace 10 minutos y no puede levantarse, le duele mucho la cadera')">Mamá se cayó · no se levanta</button>
+    <button class="pill" onclick="GeriWidget.sendQuick('Mi papá tiene 78 años, está con dolor en el pecho desde hace media hora y suda frío')">Papá · dolor de pecho</button>
+    <button class="pill" onclick="GeriWidget.sendQuick('Mi abuela está confundida desde hace una hora, no reconoce a la familia y no responde como siempre')">Abuela · confusión súbita</button>
+    <button class="pill" onclick="GeriWidget.sendQuick('Mi mamá tiene 75 años y está con fiebre de 38.5 desde ayer, sin otros síntomas')">Mamá · fiebre persistente</button>
+    <button class="pill" onclick="GeriWidget.sendQuick('Quería hacer una consulta sobre la medicación de mi papá')">Consulta de medicación</button>
+  </div>
+  <div class="widget-input">
+    <textarea id="geri-input" placeholder="Cuéntame qué está pasando..." rows="1" onkeydown="GeriWidget.onKey(event)" oninput="GeriWidget.autosize(this)"></textarea>
+    <button class="widget-send" id="geri-send" onclick="GeriWidget.send()" aria-label="Enviar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+  <div class="widget-footer">
+    Este asistente no reemplaza atención médica. Emergencia: <strong style="color: var(--red);">106</strong> ·
+    <a href="https://ijvagency.com" target="_blank" rel="noopener">Powered by IJV</a>
+  </div>
+</div>
+
+<script>
+(function() {
+  const CONFIG = {
+    n8nBase: 'https://n8n-jcg4epwgyztosnmbxghhwvdv.34.133.34.116.sslip.io/webhook/gerivittal-agent',
+    timeoutMs: 45000,
+    maxRetries: 2,
+    welcomeMessage: 'Hola, soy el asistente del Doctor de **GERIVITTAL**. Estoy aquí para ayudarle. ¿Qué está pasando? Cuénteme con sus palabras.',
+    storageKey: 'gerivittal_session_id'
+  };
+
+  const $msgs = document.getElementById('geri-msgs');
+  const $input = document.getElementById('geri-input');
+  const $send = document.getElementById('geri-send');
+  const $panel = document.getElementById('geri-panel');
+  const $fab = document.getElementById('geri-fab');
+  const $pills = document.getElementById('geri-pills');
+
+  let sessionId = sessionStorage.getItem(CONFIG.storageKey);
+  if (!sessionId) {
+    sessionId = 'web_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+    sessionStorage.setItem(CONFIG.storageKey, sessionId);
+  }
+
+  let isOpen = false;
+  let isSending = false;
+  let welcomeShown = false;
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function renderMd(text) {
+    let s = escapeHtml(text);
+    s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    s = s.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    s = s.replace(/\b(106|116|105)\b/g, '<strong style="color:#C0392B">$1</strong>');
+    s = s.replace(/\bSAMU\b/g, '<strong style="color:#C0392B">SAMU</strong>');
+    s = s.replace(/\n/g, '<br>');
+    return s;
+  }
+
+  function scrollToBottom() {
+    $msgs.scrollTop = $msgs.scrollHeight;
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(() => { $msgs.scrollTop = $msgs.scrollHeight; });
+    }
+  }
+
+  function pushUser(text) {
+    const div = document.createElement('div');
+    div.className = 'msg user';
+    div.textContent = text;
+    $msgs.appendChild(div);
+    scrollToBottom();
+  }
+
+  function pushBot(text) {
+    const div = document.createElement('div');
+    div.className = 'msg bot';
+    div.innerHTML = renderMd(text);
+    $msgs.appendChild(div);
+    scrollToBottom();
+  }
+
+  function showTyping() {
+    const div = document.createElement('div');
+    div.className = 'msg bot';
+    div.id = 'geri-typing';
+    div.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+    $msgs.appendChild(div);
+    scrollToBottom();
+  }
+  function hideTyping() {
+    const t = document.getElementById('geri-typing');
+    if (t) t.remove();
+  }
+
+  function setSending(v) {
+    isSending = v;
+    $send.disabled = v;
+    $input.disabled = v;
+  }
+
+  async function callAgent(message) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), CONFIG.timeoutMs);
+    try {
+      const res = await fetch(CONFIG.n8nBase, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, sessionId, channel: 'web' }),
+        signal: ctrl.signal
+      });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      return data.output || data.response || '';
+    } catch (e) {
+      clearTimeout(timer);
+      throw e;
+    }
+  }
+
+  async function send(text) {
+    const message = (text != null ? text : $input.value).trim();
+    if (!message || isSending) return;
+
+    if ($pills && $pills.style.display !== 'none') {
+      $pills.style.display = 'none';
+    }
+
+    pushUser(message);
+    $input.value = '';
+    autosize($input);
+    setSending(true);
+    showTyping();
+
+    let reply = '';
+    let lastErr;
+    for (let i = 0; i <= CONFIG.maxRetries; i++) {
+      try {
+        reply = await callAgent(message);
+        if (reply) break;
+      } catch (e) {
+        lastErr = e;
+        if (i < CONFIG.maxRetries) await new Promise(r => setTimeout(r, 800 * (i + 1)));
+      }
+    }
+
+    hideTyping();
+    if (reply) {
+      pushBot(reply);
+    } else {
+      pushBot('Disculpe, tuve un problema técnico al responder. Si la situación es urgente, por favor llame al **106 (SAMU)** ahora mismo. Puede intentar nuevamente en un momento.');
+    }
+    setSending(false);
+    $input.focus();
+  }
+
+  function open() {
+    $panel.classList.add('open');
+    isOpen = true;
+    if (!welcomeShown) {
+      welcomeShown = true;
+      setTimeout(() => pushBot(CONFIG.welcomeMessage), 200);
+    }
+    setTimeout(() => $input.focus(), 300);
+  }
+  function close() {
+    $panel.classList.remove('open');
+    isOpen = false;
+  }
+  function toggle() { isOpen ? close() : open(); }
+
+  function onKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      send();
+    }
+  }
+
+  function autosize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+  }
+
+  function sendQuick(text) {
+    send(text);
+  }
+
+  window.GeriWidget = { open, close, toggle, send, sendQuick, onKey, autosize };
+})();
+</script>
+
+</body>
+</html>
